@@ -117,7 +117,11 @@ export class GamePlayer {
    * on first use. No-op for JARs without JPEG.
    */
   async prepareImages(): Promise<{ decoded: number; failed: number; total: number }> {
-    return prewarmImages(this.jar.entries);
+    const result = await prewarmImages(this.jar.entries);
+    if (result.total > 0) {
+      console.log(`[j2me] JPEG pre-decoded: ${result.decoded}/${result.total}`);
+    }
+    return result;
   }
 
   stop(): void {
